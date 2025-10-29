@@ -1,3 +1,7 @@
+package edu.space;
+
+import edu.space.ui.MainMenuScene;
+import edu.engine.SceneController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
