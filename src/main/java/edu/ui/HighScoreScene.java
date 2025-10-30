@@ -1,4 +1,4 @@
-package edu.space.ui;
+package edu.ui;
 
 import edu.engine.SceneController;
 import javafx.geometry.Insets;
@@ -8,11 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-
-public class AuthorScene {
+public class HighScoreScene {
     public Scene create(){
-        Label title = new Label("Автор: Купневич Злата");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold");
+        Label title = new Label("Таблица рекордов");
+        title.setStyle("-fx-font-size: 28px; -fx-font-weight: bold");
         Button back = new Button("Назад");
 
         VBox root = new VBox(16,title,back);

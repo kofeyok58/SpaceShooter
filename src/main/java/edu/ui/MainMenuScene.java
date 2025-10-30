@@ -1,4 +1,4 @@
-package edu.space.ui;
+package edu.ui;
 
 import edu.engine.SceneController;
 import javafx.geometry.Insets;
