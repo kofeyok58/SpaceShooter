@@ -4,7 +4,7 @@ plugins {
 //    id 'java'
 }
 
-group = 'edu.space'
+group = 'edu'
 version = '1.0.0'
 
 repositories {
@@ -16,7 +16,7 @@ java{
 }
 
 application{
-    mainClass='edu.space.Main'
+    mainClass='edu.Main'
 }
 
 javafx{
