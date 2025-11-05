@@ -1,5 +1,6 @@
 package edu.ui;
 
+import edu.GameScene;
 import edu.engine.SceneController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,6 +28,12 @@ public class MainMenuScene {
         box.setAlignment(Pos.TOP_CENTER);
 
         Scene scene = new Scene (box, SceneController.WIDTH, SceneController.HEIGHT);
+
+        start.setOnAction(e -> SceneController.set(new GameScene().create()));
+        score.setOnAction(e -> SceneController.set(new HighScoreScene().create()));
+        author.setOnAction(e -> SceneController.set(new AuthorScene().create()));
+        exit.setOnAction(e -> System.exit(0));
+
         return scene;
 
     }

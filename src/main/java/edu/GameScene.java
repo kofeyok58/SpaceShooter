@@ -111,6 +111,15 @@ public class GameScene {
         int cols = 5;
         double startX = 80;
         double startY = 120;
-        enemies.add(new Enemy(startX, startY));
+        double gapX = 90;
+        double gapY = 60;
+
+        for(int r = 0; r < row; r++) {
+            for(int c=0; c < cols; c++) {
+                double x = startX + c * gapX;
+                double y = startY + r * gapY;
+                enemies.add(new Enemy(x, y));
+            }
+        }
     }
 }
