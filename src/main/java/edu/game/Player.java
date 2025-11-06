@@ -70,6 +70,10 @@ public class Player {
         }
     }
 
+//    public void render (GraphicsContext g){
+//
+//    }
+
     public void render (GraphicsContext g){
         // корабль
         g.setFill(Color.web("#2E8BFF"));

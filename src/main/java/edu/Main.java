@@ -13,8 +13,8 @@ public class Main extends Application {
         stage.setTitle("Космо шутер");
         stage.setResizable(false);
 
-//        SceneController.init(stage, 520, 980);     // размер игрового поля
-        SceneController.init(stage, 520, 580);     // размер игрового поля
+        SceneController.init(stage, 520, 980);     // размер игрового поля
+//        SceneController.init(stage, 520, 580);     // размер игрового поля
         Scene menu = new MainMenuScene().create();
         SceneController.set(menu);
 
