@@ -4,6 +4,7 @@ import edu.engine.Keys;
 import edu.engine.SceneController;
 import edu.game.Enemy;
 import edu.game.Player;
+import edu.game.Bullet;     // Нужен для доступа к пулям игрока
 import edu.ui.MainMenuScene;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Insets;
@@ -39,6 +40,10 @@ public class GameScene {
     public Scene create (){
         Canvas canvas = new Canvas(W, H);
         GraphicsContext g = canvas.getGraphicsContext2D();
+
+        // 🔽 вот это должно быть сглаживание
+        g.setImageSmoothing(true);
+
         // оверлей паузы
         Button resume = new Button("Продолжить");
         Button toMenu = new Button("Выйти в меню");
@@ -81,6 +86,17 @@ public class GameScene {
                     for (Enemy enemy : enemies){
                         enemy.update(dt, W);
                     }
+                    /* NEW
+                    столкновение пули игрока с врагом
+                    * */
+
+                    checkBulletEnemyCollision();
+
+                    /* NEW
+                    отчистка ушедших за экран врагов
+                    * */
+
+                    enemies.removeIf(e -> e.getY()> H+40);
                 }
                 render(g);
             }
@@ -119,6 +135,43 @@ public class GameScene {
                 double x = startX + c * gapX;
                 double y = startY + r * gapY;
                 enemies.add(new Enemy(x, y));
+            }
+        }
+    }
+    /* NEW
+    Простейшая проверка пересечения прямоугольника
+    * */
+
+    private void checkBulletEnemyCollision(){
+        List<Bullet> bullets = player.getBullets();
+
+        /* NEW
+        Идём с конца, что бы безопасно удалять элементы списков
+        * */
+
+        for (int i = enemies.size() - 1; i >= 0; i--){
+            Enemy e = enemies.get(i);
+            double ex = e.getX(), ey = e.getY(), ew = e.getW(), eh = e.getH();
+
+            for (int j = bullets.size() - 1; j >= 0; j--){
+                Bullet b = bullets.get(j);
+
+                /* NEW
+                Размер пули как в Player.render (4x12) и её позиция от центра
+                * */
+                double bx = b.x - 2;
+                double by = b.y - 10;
+                double bw = 4;
+                double bh = 12;
+
+                boolean hit = bx < ex + ew && bx + bw > ex &&
+                        by < ey + eh && by + bh > ey;
+
+                if(hit){
+                    // удаление врага и пули
+                    bullets.remove(j);
+                    enemies.remove(i);
+                }
             }
         }
     }

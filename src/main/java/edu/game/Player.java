@@ -1,7 +1,9 @@
 package edu.game;
 
+import edu.engine.Assets;
 import edu.engine.SceneController;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
@@ -27,6 +29,10 @@ public class Player {
 
     private final List<Bullet> bullets = new ArrayList<>();
 
+    private static final double TARGET_H = 70;
+    private static final double TARGET_W = 70;
+    private final Image sprite = Assets.image("player_ship");
+
     public Player(double startX, double startY) {
         this.x = startX;
         this.y = startY;
@@ -43,7 +49,9 @@ public class Player {
         x += vx * dt;
         y += vy * dt;
 
-        // границы окна
+        // границы с учетом размера спрайта
+        double halfW = TARGET_W/ 2.0;
+        double halfH = TARGET_H/ 2.0;
         double W = SceneController.WIDTH;
         double H = SceneController.HEIGHT;
 
@@ -70,16 +78,16 @@ public class Player {
         }
     }
 
-//    public void render (GraphicsContext g){
-//
-//    }
-
     public void render (GraphicsContext g){
-        // корабль
-        g.setFill(Color.web("#2E8BFF"));
-        g.fillRoundRect(x-22, y-14, 44, 28, 10, 10);
-        g.setFill(Color.web("#FF9500"));
-        g.fillRect(x -6, y -24, 12, 12);
+
+//        // корабль
+//        g.setFill(Color.web("#2E8BFF"));
+//        g.fillRoundRect(x-22, y-14, 44, 28, 10, 10);
+//        g.setFill(Color.web("#FF9500"));
+//        g.fillRect(x -6, y -24, 12, 12);
+
+        // спрайт корабля
+        g.drawImage(sprite, x - TARGET_W / 2.0, y - TARGET_H / 2.0, TARGET_W, TARGET_H);
 
         // пули
         g.setFill(Color.web("#00C2FF"));
