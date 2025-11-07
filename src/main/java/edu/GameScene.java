@@ -84,15 +84,15 @@ public class GameScene {
                     player.update(dt, now, keys);
                     // враги
                     for (Enemy enemy : enemies){
-                        enemy.update(dt, W);
+                        enemy.update(dt, W, now);
                     }
-                    /* NEW
+                    /*
                     столкновение пули игрока с врагом
                     * */
 
                     checkBulletEnemyCollision();
 
-                    /* NEW
+                    /*
                     отчистка ушедших за экран врагов
                     * */
 
@@ -138,14 +138,14 @@ public class GameScene {
             }
         }
     }
-    /* NEW
+    /*
     Простейшая проверка пересечения прямоугольника
     * */
 
     private void checkBulletEnemyCollision(){
         List<Bullet> bullets = player.getBullets();
 
-        /* NEW
+        /*
         Идём с конца, что бы безопасно удалять элементы списков
         * */
 
@@ -156,7 +156,7 @@ public class GameScene {
             for (int j = bullets.size() - 1; j >= 0; j--){
                 Bullet b = bullets.get(j);
 
-                /* NEW
+                /*
                 Размер пули как в Player.render (4x12) и её позиция от центра
                 * */
                 double bx = b.x - 2;
