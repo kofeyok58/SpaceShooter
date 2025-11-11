@@ -7,20 +7,30 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 
 // Игрок: позиция, движение, стрельба
 public class Player {
     private double x;
     private double y;
 
+    /*
+     * Параметры здоровья и жизни корабля
+    * */
     private double speed = 400; // пикс/сек
-    private int lives = 3;
-    private int hp = 3;
+    public static final int MAX_HP = 3;
+    public static final int MAX_LIVES = 3;
+
+    private int lives = MAX_LIVES;
+    private int hp = MAX_HP;
+    /*
+     * Небольшая неуязвимость после попадания
+    * */
+    private static final long INVULN = 900_000_000L; // ~0.9 секунд
+    private long lastHitAt = 1;
+
 
     // стрельба
 
@@ -78,7 +88,26 @@ public class Player {
         }
     }
 
-    public void render (GraphicsContext g){
+    /**
+     * Попадание по игроку (с учетом неуязвимости)
+     */
+    public void hit (long now){
+        if (isInvulnerable(now)) return;
+
+        hp -= 1;
+        lastHitAt = now;
+
+        if (hp <= 0){
+            lives -= 1;
+            hp = (lives > 0) ? MAX_HP : 0;
+        }
+    }
+
+    public boolean isAlive () {return lives > 0 && hp > 0;}
+    public boolean isInvulnerable(long now){return  lastHitAt > 0 && (now - lastHitAt) < INVULN;}
+
+
+    public void render (GraphicsContext g, long now){
 
 //        // корабль
 //        g.setFill(Color.web("#2E8BFF"));
@@ -86,6 +115,13 @@ public class Player {
 //        g.setFill(Color.web("#FF9500"));
 //        g.fillRect(x -6, y -24, 12, 12);
 
+        // легкое мигание при неуязвимости
+        boolean inv = isInvulnerable(now);
+        if (inv) {
+            // миганим 6 раз в секунду
+            long t = (now / 1_000_000_000L) % 2;  // ~ каждые 0.1 секунду
+
+        }
         // спрайт корабля
         g.drawImage(sprite, x - TARGET_W / 2.0, y - TARGET_H / 2.0, TARGET_W, TARGET_H);
 
@@ -96,10 +132,16 @@ public class Player {
         }
     }
 
+    /*
+    * Прямоугольник игрока для коллизии
+    * */
+    public double getLeft(){return x - TARGET_W / 2.0;}
+    public double getTop(){return y - TARGET_H / 2.0;}
+    public double getWidth(){return TARGET_W;}
+    public double getHeight(){return TARGET_H;}
+
     public int getLives(){return lives;}
     public int getHp(){return hp;}
-
-    // пригодится позже, когда враги будут в нас стрелять
 
     public List<Bullet> getBullets(){return bullets;}
 

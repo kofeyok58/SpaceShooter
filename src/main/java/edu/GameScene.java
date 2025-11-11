@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -31,6 +32,8 @@ public class GameScene {
     private final Keys keys = new Keys();
     private AnimationTimer loop;
     private boolean paused = false;
+
+    private boolean gameOver = false;
 
     private final Player player = new Player(W/2.0, H - 140);
 
@@ -53,6 +56,11 @@ public class GameScene {
         overlay.setVisible(false);
         overlay.setMouseTransparent(true);
 
+        /*
+        * Оверлей
+        * */
+
+
         StackPane root = new StackPane(canvas, overlay);
         Scene scene = new Scene(root, W, H, Color.WHITE);
 
@@ -66,6 +74,7 @@ public class GameScene {
             }
         });
         toMenu.setOnAction(e-> SceneController.set(new MainMenuScene().create()));
+        // new restart
 
         // 👇 создаём врагов в начале сцены
 
@@ -86,6 +95,13 @@ public class GameScene {
                     for (Enemy enemy : enemies){
                         enemy.update(dt, W, now);
                     }
+
+                    /*
+                    * Столкновение пули врага -> игрока
+                    * */
+
+                    checkEnemyBulletVsPlayer(now); // now
+
                     /*
                     столкновение пули игрока с врагом
                     * */
@@ -98,7 +114,7 @@ public class GameScene {
 
                     enemies.removeIf(e -> e.getY()> H+40);
                 }
-                render(g);
+                render(g, now);
             }
 
         };
@@ -108,7 +124,7 @@ public class GameScene {
         return scene;
     }
 
-    private void render (GraphicsContext g){
+    private void render (GraphicsContext g, long now){
         g.setFill(Color.WHITE);
         g.fillRect(0, 0, W, H);
 
@@ -117,9 +133,18 @@ public class GameScene {
             enemy.render(g);
         }
 
-        player.render(g);
+        player.render(g, now);
 
-        }
+        /*
+        * Жизнь и хп
+        * */
+        g.setFill(Color.RED);
+        String hearts = "❤".repeat(Math.max(0, player.getLives()));
+        g.fillText("ЖИЗНИ: " + hearts, 12, 24);
+        g.fillText("HP: " + player.getHp() + "/" + Player.MAX_HP, 12, 44);
+
+
+    }
 
     private void spawnEnemies() {
         enemies.clear();
@@ -171,6 +196,37 @@ public class GameScene {
                     // удаление врага и пули
                     bullets.remove(j);
                     enemies.remove(i);
+                }
+            }
+        }
+    }
+    /*
+    * Столкновение пуль врага с игроком
+    * */
+
+    private void checkEnemyBulletVsPlayer(long now){
+        // граница игрока
+        double px = player.getLeft();
+        double py = player.getTop();
+        double pw = player.getWidth();
+        double ph = player.getHeight();
+
+        for (Enemy e : enemies){
+            List<Bullet> bullets = e.getBullets();
+            for (int j = bullets.size() - 1; j >= 0; j--){
+                Bullet b = bullets.get(j);
+
+                double bx = b.x -2;
+                double by = b.y - 10;
+                double bw = 4;
+                double bh = 12;
+
+                boolean hit = bx < px + pw && bx + bw > px &&
+                        by < py + ph && by + bh > py;
+
+                if (hit){
+                    bullets.remove(j);
+                    player.hit(now);
                 }
             }
         }

@@ -123,4 +123,6 @@ public class Enemy {
     public double getY() {return y;}
     public double getW() {return w;}
     public double getH() {return h;}
+
+    public List<Bullet> getBullets(){return bullets;}
 }
