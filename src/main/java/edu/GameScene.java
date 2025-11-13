@@ -2,11 +2,13 @@ package edu;
 
 import edu.engine.Keys;
 import edu.engine.SceneController;
+import edu.engine.Score;
 import edu.game.Enemy;
 import edu.game.Player;
 import edu.game.Bullet;     // Нужен для доступа к пулям игрока
 import edu.ui.MainMenuScene;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -34,6 +36,8 @@ public class GameScene {
     private boolean paused = false;
     private boolean gameOver = false;
 
+    private final Score score = new Score();
+
     private final Player player = new Player(W/2.0, H - 140);
 
     // флаг - игрок изначально жив
@@ -42,6 +46,8 @@ public class GameScene {
 
     // 👇 вот тут появились враги
     private final List<Enemy> enemies = new ArrayList<>();
+
+    private boolean nameAsked = false;
 
     public Scene create (){
         Canvas canvas = new Canvas(W, H);
@@ -137,6 +143,24 @@ public class GameScene {
                         gameOver = true;
                         paused = true;
 
+                        if (!nameAsked){
+                            nameAsked = true;
+
+                            Platform.runLater(()->{
+                                javafx.scene.control.TextInputDialog dlg = new javafx.scene.control.TextInputDialog("Player");
+                                dlg.setTitle("Новый результат");
+                                dlg.setHeaderText("Ваш счет: " + score.get());
+                                dlg.setContentText("Введите имя: ");
+                                java.util.Optional<String> res = dlg.showAndWait();
+                                String name = res.orElse("Player").trim();
+                                if (name.isEmpty()) name = "ИГРОК";
+
+                                edu.engine.HighScores.add(name, score.get());
+
+                            });
+                        }
+
+                        // показывает оверлей GAMEOVER
                         lostLbl.setText("ВЫ ПРОИГРАЛИ");
                         lostLbl.setStyle("-fx-font-size: 38px; -fx-text-fill: red;");
                         gameOverOverlay.setVisible(true);
@@ -176,6 +200,8 @@ public class GameScene {
         String hearts = "❤".repeat(Math.max(0, player.getLives()));
         g.fillText("ЖИЗНИ: " + hearts, 12, 24);
         g.fillText("HP: " + player.getHp() + "/" + Player.MAX_HP, 12, 44);
+
+        g.fillText("ОЧКИ: " + score.get(), W - 80, 24);
 
 
     }
