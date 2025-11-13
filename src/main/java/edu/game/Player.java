@@ -119,11 +119,12 @@ public class Player {
         boolean inv = isInvulnerable(now);
         if (inv) {
             // миганим 6 раз в секунду
-            long t = (now / 1_000_000_000L) % 2;  // ~ каждые 0.1 секунду
-
+            long t = (now / 100_000_000L) % 2;  // ~ каждые 0.1 секунду
+            if (t == 0) g.setGlobalAlpha(0.5);
         }
         // спрайт корабля
         g.drawImage(sprite, x - TARGET_W / 2.0, y - TARGET_H / 2.0, TARGET_W, TARGET_H);
+        if(inv) g.setGlobalAlpha(1);
 
         // пули
         g.setFill(Color.web("#00C2FF"));

@@ -32,10 +32,13 @@ public class GameScene {
     private final Keys keys = new Keys();
     private AnimationTimer loop;
     private boolean paused = false;
-
     private boolean gameOver = false;
 
     private final Player player = new Player(W/2.0, H - 140);
+
+    // флаг - игрок изначально жив
+    private boolean playerDying = false;
+
 
     // 👇 вот тут появились враги
     private final List<Enemy> enemies = new ArrayList<>();
@@ -57,11 +60,20 @@ public class GameScene {
         overlay.setMouseTransparent(true);
 
         /*
-        * Оверлей
+        * Оверлей GAME OVER
         * */
 
+        Label lostLbl = new Label("ВЫ ПРОИГРАЛИ! ");
+        lostLbl.setStyle("-fx-font-size: 38px; -fx-font-weight: bold;");
+        Button restart = new Button("НАЧАТЬ ЗАНОВО?");
+        VBox gameOverOverlay = new VBox(16, lostLbl, restart);
+        gameOverOverlay.setAlignment(Pos.CENTER);
+        gameOverOverlay.setPadding(new Insets(12));
+        gameOverOverlay.setVisible(false);
+        gameOverOverlay.setMouseTransparent(true);
 
-        StackPane root = new StackPane(canvas, overlay);
+
+        StackPane root = new StackPane(canvas, overlay, gameOverOverlay);
         Scene scene = new Scene(root, W, H, Color.WHITE);
 
         keys.attach(scene);
@@ -74,7 +86,11 @@ public class GameScene {
             }
         });
         toMenu.setOnAction(e-> SceneController.set(new MainMenuScene().create()));
-        // new restart
+
+        //  restart
+        restart.setOnAction(e -> {
+            SceneController.set(new GameScene().create());
+        });
 
         // 👇 создаём врагов в начале сцены
 
@@ -88,9 +104,12 @@ public class GameScene {
                 double dt = Math.min((now - prev)/1_000_000_000.0, 0.05);
                 prev = now;
 
-                if (!paused){
+                if (!paused && !gameOver){
                     // игрок
-                    player.update(dt, now, keys);
+                    if (!playerDying){
+                        player.update(dt, now, keys);
+                    }
+
                     // враги
                     for (Enemy enemy : enemies){
                         enemy.update(dt, W, now);
@@ -100,7 +119,9 @@ public class GameScene {
                     * Столкновение пули врага -> игрока
                     * */
 
-                    checkEnemyBulletVsPlayer(now); // now
+                    if (!playerDying){
+                        checkEnemyBulletVsPlayer(now); // now
+                    }
 
                     /*
                     столкновение пули игрока с врагом
@@ -108,6 +129,19 @@ public class GameScene {
 
                     checkBulletEnemyCollision();
 
+                    if (!player.isAlive()){
+                        playerDying = true;
+                    }
+
+                    if (playerDying){
+                        gameOver = true;
+                        paused = true;
+
+                        lostLbl.setText("ВЫ ПРОИГРАЛИ");
+                        lostLbl.setStyle("-fx-font-size: 38px; -fx-text-fill: red;");
+                        gameOverOverlay.setVisible(true);
+                        gameOverOverlay.setMouseTransparent(false);
+                    }
                     /*
                     отчистка ушедших за экран врагов
                     * */
