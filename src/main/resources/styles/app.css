@@ -1,0 +1,114 @@
+/* ===== Общие настройки ===== */
+.root {
+  -fx-font-family: "Segoe UI", "Arial", sans-serif;
+  -fx-text-fill: white;
+}
+
+/* Фон для меню / экранов */
+.screen-menu {
+  -fx-background-color: linear-gradient(to bottom, #10172A 0%, #020617 100%);
+}
+
+.screen-dark {
+  -fx-background-color: linear-gradient(to bottom, #020617 0%, #020617 60%, #030712 100%);
+}
+
+/* Панель для таблицы рекордов (фон под таблицей) */
+.score-panel {
+  -fx-background-color: rgba(15, 23, 42, 0.92);
+  -fx-background-radius: 18;
+  -fx-padding: 16;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 24, 0.35, 0, 6);
+}
+
+/* Строки таблицы рекордов — делаем светлее и читабельнее */
+.score-row {
+  -fx-background-color: rgba(255, 255, 255, 0.22);
+  -fx-background-radius: 10;
+  -fx-padding: 6 12;
+}
+
+.score-row:hover {
+  -fx-background-color: rgba(255, 255, 255, 0.30);
+}
+
+.score-row .label {
+  -fx-text-fill: #F9FAFB;
+}
+
+/* Заголовок таблицы чуть ярче */
+.table-header {
+    -fx-text-fill: #a5b4fc;
+    -fx-font-weight: bold;
+}
+}
+/* Полупрозрачная карточка (оверлей) */
+.card {
+  -fx-background-color: rgba(15, 23, 42, 0.85);
+  -fx-background-radius: 18;
+  -fx-padding: 20;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 28, 0.35, 0, 8);
+}
+
+/* Заголовки */
+.title-xl {
+  -fx-font-size: 32px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #E5E7EB;
+}
+
+.title-lg {
+  -fx-font-size: 22px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #E5E7EB;
+}
+
+/* ===== Кнопки ===== */
+.btn {
+  -fx-background-radius: 999;
+  -fx-padding: 10 20;
+  -fx-font-size: 16px;
+  -fx-cursor: hand;
+  -fx-border-radius: 999;
+  -fx-background-insets: 0,1;
+  -fx-text-fill: white;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 12, 0.3, 0, 3);
+}
+
+.btn:hover {
+  -fx-translate-y: -1;
+}
+
+.btn:pressed {
+  -fx-translate-y: 0;
+}
+
+/* Основная кнопка */
+.btn-primary {
+  -fx-background-color: linear-gradient(to bottom, #3B82F6, #1D4ED8);
+  -fx-border-color: rgba(255,255,255,0.15);
+}
+
+/* Спокойная (вторичная) */
+.btn-ghost {
+  -fx-background-color: transparent;
+  -fx-border-color: rgba(148,163,184,0.8);
+}
+
+/* Опасная (выход/удалить) */
+.btn-danger {
+  -fx-background-color: linear-gradient(to bottom, #EF4444, #B91C1C);
+  -fx-border-color: rgba(248,113,113,0.8);
+}
+
+/* Для таблицы рекордов (если захочешь) */
+.table-row {
+  -fx-background-color: rgba(148,163,184,0.12);
+  -fx-background-radius: 12;
+  -fx-padding: 6 10;
+}
+
+.table-header {
+  -fx-font-weight: bold;
+  -fx-text-fill: #A5B4FC;
+}
