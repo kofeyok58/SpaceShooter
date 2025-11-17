@@ -1,14 +1,13 @@
 package edu;
 
-import edu.ui.MainMenuScene;
 import edu.engine.SceneController;
+import edu.ui.MainMenuScene;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage stage){
         stage.setTitle("Космо шутер");
